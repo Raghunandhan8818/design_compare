@@ -1,0 +1,24 @@
+web:
+  container_name: design_compare_web
+  restart: always
+  build: .
+  ports:
+    - 27027:8000
+  expose:
+    - 8000
+  env_file: production.env
+  volumes:
+    - design_compare_media_data:/usr/src/app/media
+  links:
+    - postgres:postgres
+  command: sh '/usr/src/app/run_web.sh'
+
+postgres:
+  container_name: design_compare_postgres
+  restart: always
+  image: postgres:latest
+  env_file: production.env
+  ports:
+    - 4444:5432
+  volumes:
+    - design_compare_pgdata:/var/lib/postgresqql/data/

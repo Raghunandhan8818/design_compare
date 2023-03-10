@@ -1,0 +1,70 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block link_reference %}
+{% endblock link_reference %}
+{% block content %}
+    <div class="card col-10 mx-auto" style="box-shadow: 20px 20px 50px grey;">
+        <div class="card-header">
+            <h5 class="card-title">Upload Customer Image</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'image-search' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="upload" id="filetag" accept="image/*"><br><br><br>
+                <center><img src="" id="preview" style="align-items: center"></center>
+                <br>
+                <input class="btn btn-dark btn-sm" type="submit" value="Search">
+            </form>
+        </div>
+    </div>
+    {% if is_result %}
+
+
+        <div class="card col-10 mx-auto" style="box-shadow: 20px 20px 50px grey;">
+            <div class="card-header">
+                <h5 class="card-title">Result</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for image in images %}
+                        <div class="col-4">
+                            <span>{{ forloop.counter }} )</span>
+                            <center><img src="../media/dataset_images/{{ image }}" alt="" height="150px" width="150px"></center>
+                            <p style="text-align: center;font-weight: bold">{{ image }}</p>
+                        </div>
+                    {% endfor %}
+
+
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <script>
+        var fileTag = document.getElementById("filetag"),
+            preview = document.getElementById("preview");
+
+        fileTag.addEventListener("change", function () {
+            preview.style.height = "300px";
+            preview.style.width = "300px";
+            preview.style.alignItems = "center";
+            changeImage(this);
+        });
+
+        function changeImage(input) {
+            var reader;
+
+            if (input.files && input.files[0]) {
+                reader = new FileReader();
+
+                reader.onload = function (e) {
+                    preview.setAttribute('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+
+        }
+
+    </script>
+{% endblock content %}
+
